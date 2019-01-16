@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# parental - A shortest way to find up a path in the parent directories
-# https://github.com/morulus/parental.bash
+# find-outer - A shortest way to find up a path in the parent directories
+# https://github.com/morulus/find-outer.bash
 #
 # @version 0.1.4
 # @author Vladimir Kalmykov <vladimirmorulus@gmail.com>
 # @license MIT
 
-PROGRAM="parental"
+PROGRAM="find-outer"
 COLOR='\033[1;33m'
 NC='\033[0m'
 COLORED_PROGRAM="$(echo -e "${COLOR}$PROGRAM${NC}")"

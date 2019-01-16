@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Bash completion for parental
+# Bash completion for find-outer
 
 strindex() {
   x="${1%%$2*}"
@@ -19,21 +19,21 @@ trim()
 }
 
 
-_parental() {
+_find-outer() {
   query=${COMP_WORDS[1]}
-  posi=$(parental -n 1 "$query*")
+  posi=$(find-outer -n 1 "$query*")
   index=$(strindex "$posi" "$query")
   splited="${posi:((index))}"
   COMPREPLY=(trim "$splited")
 }
 
-complete -F _parental parental
+complete -F _find-outer find-outer
 
-# Alias for parental
+# Alias for find-outer
 
-parentalGreedy() {
-  parental -g "$@"
+find-outerGreedy() {
+  find-outer -g "$@"
 }
 
-alias ..=parental
-alias ...=parentalGreedy
+alias ..=find-outer
+alias ...=find-outerGreedy

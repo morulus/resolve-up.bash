@@ -1,14 +1,14 @@
-parental [![Build Status](https://travis-ci.org/morulus/parental.bash.svg)](https://travis-ci.org/morulus/parental.bash)
+find-outer [![Build Status](https://travis-ci.org/morulus/find-outer.bash.svg)](https://travis-ci.org/morulus/find-outer.bash)
 -----
 
-A shortest way to find up a path in the parental directories
+A shortest way to find up a path in the find-outer directories
 
 ## Installation
 
 Execute the following command in your terminal:
 
 ```shell
-TD=$(mktemp -d) && curl -L https://github.com/morulus/parental.bash/archive/v0.1.5.tar.gz| tar -xz --strip-components=1 -C "$TD" && \
+TD=$(mktemp -d) && curl -L https://github.com/morulus/find-outer.bash/archive/v0.0.1.tar.gz| tar -xz --strip-components=1 -C "$TD" && \
 cd $TD && make install && rm -rf $TD
 ```
 
@@ -16,10 +16,10 @@ cd $TD && make install && rm -rf $TD
 
 ## Usage
 
-The parental exports short commands:
+The find-outer exports short commands:
 
-- `..` (alias of `parental`) to resolve nearest path in the parent directories
-- `...` (greedy mode of parental, alias of `parental -g`) to resolve all matches in the parent directories.
+- `..` (alias of `find-outer`) to resolve nearest path in the parent directories
+- `...` (greedy mode of find-outer, alias of `find-outer -g`) to resolve all matches in the parent directories.
 
 Examples:
 
@@ -46,7 +46,7 @@ Examples:
 
 # Check: are we inside a git repo?
 ... .git
-  => parental: .git not found
+  => find-outer: .git not found
 
 # Get the names of all sh scripts, located in the nearest directory .bin
 .. .bin/*.sh
@@ -81,7 +81,7 @@ You can use glob patterns with command `..`
 
 ## Known limitations and bugs
 
-- Aliases `..` and `...` doesn't work in the subshell scripts. Use `parental` and `parental -g` instead. Any help in solving this problem is welcome.
+- Aliases `..` and `...` doesn't work in the subshell scripts. Use `find-outer` and `find-outer -g` instead. Any help in solving this problem is welcome.
 
 ## License
 

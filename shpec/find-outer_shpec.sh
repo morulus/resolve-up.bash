@@ -4,10 +4,10 @@
 shopt -s expand_aliases
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-COMMAND=$(cd $DIR && cd ../ && realpath ./parental.bash)
+COMMAND=$(cd $DIR && cd ../ && realpath ./find-outer.bash)
 
-# Localize parental (instead of probably existing global command)
-parental() {
+# Localize find-outer (instead of probably existing global command)
+find-outer() {
   if eval "$COMMAND" "$@"; then
     return 0
   else
@@ -15,14 +15,14 @@ parental() {
   fi
 }
 
-parentalGreedy() {
-  parental -g "$@"
+find-outerGreedy() {
+  find-outer -g "$@"
 }
 
-alias parental=parental
-alias parental -g=parentalGreedy
+alias find-outer=find-outer
+alias find-outer -g=find-outerGreedy
 
-ROOT=/tmp/parental.shpec
+ROOT=/tmp/find-outer.shpec
 rm -rf $ROOT
 
 mkdir -p $ROOT/Work/projects/era/{node_modules,src/styles}
@@ -50,67 +50,67 @@ endsWith() {
 ABSROOT=$(cd "$ROOT" && pwd)
 echo "Root: $ABSROOT"
 stdout=""
-describe 'noglob parental'
-  describe 'parental'
-    it 'parental empty string'
+describe 'noglob find-outer'
+  describe 'find-outer'
+    it 'find-outer empty string'
       cd $ROOT
-      stdout=$(parental)
-      assert equal "$stdout" "parental:  not found"
-      assert equal $(evalSuccess "parental") false
+      stdout=$(find-outer)
+      assert equal "$stdout" "find-outer:  not found"
+      assert equal $(evalSuccess "find-outer") false
     end
-    it 'parental unexisten path'
+    it 'find-outer unexisten path'
       cd $ROOT
-      stdout=$(parental undefined/path)
-      assert equal "$stdout" "parental: undefined/path not found"
+      stdout=$(find-outer undefined/path)
+      assert equal "$stdout" "find-outer: undefined/path not found"
     end
-    it 'parental existen path'
+    it 'find-outer existen path'
       cd $ROOT/Work/projects/era/
-      stdout=$(parental .npmrc)
+      stdout=$(find-outer .npmrc)
       assert test $(endsWith "$stdout" "/Work/projects/era/.npmrc")
-      assert equal $(evalSuccess "parental .npmrc") true
+      assert equal $(evalSuccess "find-outer .npmrc") true
     end
-    it 'parental existen file path'
+    it 'find-outer existen file path'
       cd $ROOT/Work/projects/era/
-      stdout=$(parental .npmrc)
+      stdout=$(find-outer .npmrc)
       assert test $(endsWith "$stdout" "/Work/projects/era/.npmrc")
     end
-    it 'parental existen folder path'
+    it 'find-outer existen folder path'
       cd $ROOT/Work/projects/era/
-      stdout=$(parental era)
+      stdout=$(find-outer era)
       assert test $(endsWith "$stdout" "/Work/projects/era")
     end
-    it 'parental existen folder/file path'
+    it 'find-outer existen folder/file path'
       cd $ROOT/Work/projects/era/
-      stdout=$(parental Work/.npmrc)
+      stdout=$(find-outer Work/.npmrc)
       assert test $(endsWith "$stdout" "Work/.npmrc")
     end
-    it 'parental existen folder, unexisten file path'
+    it 'find-outer existen folder, unexisten file path'
       cd $ROOT/Work/projects/era/
-      stdout=$(parental Work/.npmrc2)
-      assert test $(endsWith "$stdout" "parental: Work/.npmrc2 not found")
-      assert equal $(evalSuccess "parental Work/.npmrc2") false
+      stdout=$(find-outer Work/.npmrc2)
+      assert test $(endsWith "$stdout" "find-outer: Work/.npmrc2 not found")
+      assert equal $(evalSuccess "find-outer Work/.npmrc2") false
     end
-    it 'parental unexisten path with one symbol'
+    it 'find-outer unexisten path with one symbol'
       cd $ROOT
-      stdout=$(parental x)
-      assert equal "$stdout" "parental: x not found"
+      stdout=$(find-outer x)
+      assert equal "$stdout" "find-outer: x not found"
     end
   end
 
-  describe 'parental -g'
-    it 'greedy parental'
+  describe 'find-outer -g'
+    it 'greedy find-outer'
       cd $ROOT/Work/projects/era/
-      stdout=($(parental -g .npmrc))
+      stdout=($(find-outer -g .npmrc))
       assert test $(endsWith "${stdout[0]}" "/Work/projects/era/.npmrc")
       assert test $(endsWith "${stdout[1]}" "/Work/.npmrc")
     end
   end
 
   describe 'glob'
-    describe 'parental'
+    describe 'find-outer'
       cd $ROOT/Work/projects/
       local stdout
-      stdout=$(parental '.*rc')
+      stdout=$(find-outer '.*rc')
       stdout=($stdout[@])
       assert equal "${#stdout[@]}" "3"
       assert test ${endsWith "${stdout[0]}" "Work/.eslintrc"}

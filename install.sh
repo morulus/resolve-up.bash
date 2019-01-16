@@ -19,8 +19,8 @@ done
 
 # Copy to the home directory if we are not inside home directory
 CURERNTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
-TARGETDIST="$HOME/.parental.bash"
-TARGETSIM='/usr/local/bin/parental'
+TARGETDIST="$HOME/.find-outer.bash"
+TARGETSIM='/usr/local/bin/find-outer'
 HL='\033[1;33m' # Yellow
 ER='\033[0;31m' # Red
 NC='\033[0m' # No Color
@@ -55,7 +55,7 @@ fatalError() {
 
 # TASKS
 cleanTargetDist() {
-    # If ~/.parental.bash already exists we should remove it
+    # If ~/.find-outer.bash already exists we should remove it
     dotEffect
     rm -r "$TARGETDIST"
     mkdir "$TARGETDIST"
@@ -70,13 +70,13 @@ cleanCommand() {
 
 copyDist() {
     dotEffect
-    cp -R "$CURERNTDIR/." "$HOME/.parental.bash"
+    cp -R "$CURERNTDIR/." "$HOME/.find-outer.bash"
     dotEffect
 }
 
 linkCommand() {
     dotEffect
-    cp "$TARGETDIST/parental.bash" $TARGETSIM
+    cp "$TARGETDIST/find-outer.bash" $TARGETSIM
     dotEffect
 }
 
@@ -88,10 +88,10 @@ patchBashrc() {
         fatalError "Installer expects ~/.bashrc exists and writable."
     fi
     dotEffect
-    if ! hide=$(grep -R "source ~/.parental.bash/parental-initialize.sh" "$HOME/.bashrc")
+    if ! hide=$(grep -R "source ~/.find-outer.bash/find-outer-initialize.sh" "$HOME/.bashrc")
     then
-        printf '\n\n'$"# Initialize parental.bash" >> "$HOME/.bashrc"
-        printf "\nsource ~/.parental.bash/parental-initialize.sh" >> "$HOME/.bashrc"
+        printf '\n\n'$"# Initialize find-outer.bash" >> "$HOME/.bashrc"
+        printf "\nsource ~/.find-outer.bash/find-outer-initialize.sh" >> "$HOME/.bashrc"
         dotEffect
     fi
     dotEffect
@@ -101,7 +101,7 @@ NEEDS_CLEAN_TARGETDIST=false
 NEEDS_CLEAN_COMMAND=false
 NEEDS_COPY_DIST=false
 
-# Ensure that distribution folder located in ~/.parental.bash
+# Ensure that distribution folder located in ~/.find-outer.bash
 if ! [ "$CURERNTDIR" = "$TARGETDIST" ]; then
     NEEDS_COPY_DIST=true
     if [ -d "$TARGETDIST" ]; then
@@ -114,7 +114,7 @@ fi
 if [ -L "$TARGETSIM" ] || [ -f "$TARGETSIM" ] || [ -d "$TARGETSIM" ]; then
     if ! [ $FORCE ]; then
         clear
-        printf "Seems like command ${HL}parental${NC} already exists in ${HL}$TARGETSIM${NC}. This program requires that name.\n"
+        printf "Seems like command ${HL}find-outer${NC} already exists in ${HL}$TARGETSIM${NC}. This program requires that name.\n"
         read -p "Override it?  (y/n)" -n 1 -r
         echo ""
     fi
@@ -129,7 +129,7 @@ fi
 # Install:
 clear
 ## Intro:
-printf "Install ${HL}parental.bash${NC} to your machine:\n"
+printf "Install ${HL}find-outer.bash${NC} to your machine:\n"
 
 ## Cleaning:
 printf "Cleaning"
@@ -161,5 +161,5 @@ doneEffect
 # Postinstall:
 sh "$HOME/.bashrc"
 printf "\n"
-printf "Command ${HL}parental${NC} now aviable in your CLI\n"
+printf "Command ${HL}find-outer${NC} now aviable in your CLI\n"
 printf "\n"
