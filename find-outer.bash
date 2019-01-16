@@ -1,12 +1,12 @@
-#!/usr/bin/env bash
-# find-outer - A shortest way to find up a path in the parent directories
-# https://github.com/morulus/find-outer.bash
+#!/bin/bash
+# invoke - A shortest way to find up a path in the parent directories
+# https://github.com/morulus/invoke.bash
 #
 # @version 0.1.4
 # @author Vladimir Kalmykov <vladimirmorulus@gmail.com>
 # @license MIT
 
-PROGRAM="find-outer"
+PROGRAM="invoke"
 COLOR='\033[1;33m'
 NC='\033[0m'
 COLORED_PROGRAM="$(echo -e "${COLOR}$PROGRAM${NC}")"
@@ -14,6 +14,7 @@ COLORED_PROGRAM="$(echo -e "${COLOR}$PROGRAM${NC}")"
 # Default arguments
 LIMIT=99999
 MODIFIER=""
+RESOLVER=""
 GREEDY=0
 
 # Handle arguments
@@ -35,6 +36,12 @@ case $key in
     ;;
     -m|--modif)
     MODIFIER="$2"
+    ARGUMENTS="$ARGUMENTS $1 $2"
+    shift # past argument
+    shift # past value
+    ;;
+    -r|--resolver)
+    RESOLVER="$2"
     ARGUMENTS="$ARGUMENTS $1 $2"
     shift # past argument
     shift # past value
@@ -77,9 +84,27 @@ modify() {
   echo "$result"
 }
 
+buildinResolve() {
+  local result=$1
+  local nextResult
+  if [ -n "$RESOLVER" ]; then
+    if nextResult=$($RESOLVER "$result"); then
+      echo "$nextResult"
+      return 0
+    fi
+  fi
+
+  if [ -f "$result" ] || [ -d "$result" ]; then
+    echo "$result"
+    return 0
+  fi
+  return 1
+}
+
 resolve() {
   local query="$1"
   local absPath
+  local resolvedPath
   local postResult
   if [[ $1 =~ .*\*.* ]] && [[ $(pwd) != '/' ]]; then
     cd "$(dirname "$(pwd)")" || return 1
@@ -99,8 +124,8 @@ resolve() {
       return 1;
     fi
     if [ $# == 1 ]; then
-      if [ -f "$1" ] || [ -d "$1" ]; then
-        absPath="$(realpath "$1")"
+      if resolvedPath=$(buildinResolve "$1"); then
+        absPath="$(realpath "$resolvedPath")"
         postResult="$absPath"
         if postResult=$(modify "$absPath"); then
           echo "$postResult"
@@ -125,6 +150,7 @@ resolve() {
       fi
     else
       local index=0
+      # Handle resolved by OS/user list of files
       for var in "$@"
       do
         if [ $index -eq "$LIMIT" ]; then
@@ -166,8 +192,16 @@ cmd_resolve() {
     echo "$PROGRAM: $1 not found"
     exit 1
   else
-     echo "$result"
-    if [ $GREEDY -eq 1 ]; then
+    # shellcheck disable=SC2206
+    local lines=(${result[@]})
+    local count="${#lines[@]}"
+    if ((count > LIMIT)); then
+      # Slice excess values
+      lines=("${lines[@]:0:$LIMIT}")
+      result=$(printf "%s\n" "${lines[@]}")
+    fi
+    echo "$result"
+    if ((count < LIMIT)) && [ $GREEDY -eq 1 ]; then
       query="${result[0]}"
       superpos=${query//"$1"/""}
       # shellcheck disable=SC2086
