@@ -1,15 +1,16 @@
 #!/bin/bash
-# invoke - A shortest way to find up a path in the parent directories
-# https://github.com/morulus/invoke.bash
+# resolve-up - A shortest way to find up a path in the parent directories
+# https://github.com/morulus/resolve-up.bash
 #
 # @version 0.1.4
 # @author Vladimir Kalmykov <vladimirmorulus@gmail.com>
 # @license MIT
 
-PROGRAM="invoke"
+PROGRAM=$(realpath "$0")
+PROGRAM_NAME="resolve-up"
 COLOR='\033[1;33m'
 NC='\033[0m'
-COLORED_PROGRAM="$(echo -e "${COLOR}$PROGRAM${NC}")"
+COLORED_PROGRAM="$(echo -e "${COLOR}$PROGRAM_NAME${NC}")"
 
 # Default arguments
 LIMIT=99999
@@ -189,7 +190,7 @@ cmd_resolve() {
   fi
   local result=""
   if ! result=$(resolve "$@"); then
-    echo "$PROGRAM: $1 not found"
+    echo "$PROGRAM_NAME: $1 not found"
     exit 1
   else
     # shellcheck disable=SC2206

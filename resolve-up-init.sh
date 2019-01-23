@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Bash completion for find-outer
+# Bash completion for resolve-up
 
 strindex() {
   x="${1%%$2*}"
@@ -19,21 +19,21 @@ trim()
 }
 
 
-_find-outer() {
+_resolve-up() {
   query=${COMP_WORDS[1]}
-  posi=$(find-outer -n 1 "$query*")
+  posi=$(resolve-up -n 1 "$query*")
   index=$(strindex "$posi" "$query")
   splited="${posi:((index))}"
   COMPREPLY=(trim "$splited")
 }
 
-complete -F _find-outer find-outer
+complete -F _resolve-up resolve-up
 
-# Alias for find-outer
+# Alias for resolve-up
 
-find-outerGreedy() {
-  find-outer -g "$@"
+resolve-upGreedy() {
+  resolve-up -g "$@"
 }
 
-alias ..=find-outer
-alias ...=find-outerGreedy
+alias ..=resolve-up
+alias ...=resolve-upGreedy

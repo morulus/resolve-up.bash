@@ -2,7 +2,7 @@ all: install lint test
 
 lint:
 	test -s `which shellcheck` || { echo "shellcheck (https://github.com/koalaman/shellcheck) wasn't found on the PATH. Please install it and try again."; exit 1; }
-	shellcheck -s bash -f gcc find-outer.bash
+	shellcheck -s bash -f gcc resolve-up.bash
 install:
 	sh ./install.sh
 test:
