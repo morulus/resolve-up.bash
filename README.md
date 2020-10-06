@@ -8,7 +8,7 @@ A shortest way to find up a path in the resolve-up directories
 Execute the following command in your terminal:
 
 ```shell
-TD=$(mktemp -d) && curl -L https://github.com/morulus/resolve-up.bash/archive/v0.0.1.tar.gz| tar -xz --strip-components=1 -C "$TD" && \
+TD=$(mktemp -d) && curl -L https://github.com/morulus/resolve-up.bash/archive/v0.0.2.tar.gz| tar -xz --strip-components=1 -C "$TD" && \
 cd $TD && make install && rm -rf $TD
 ```
 
